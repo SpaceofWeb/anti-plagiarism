@@ -1,0 +1,20 @@
+.container-fluid {
+	padding-top: 90px;
+}
+
+.jumbotron {
+	padding: 20px 15px 25px 15px;
+}
+
+.bgcolor {
+	background-color: #4169e1;
+	color: white;
+}
+
+.right {
+	text-align: right;
+}
+
+.progress {
+	border: 1px solid #2789dd;
+}
