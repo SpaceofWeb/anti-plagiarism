@@ -145,7 +145,7 @@ jqUpload.prototype.ajax = () => {
 		processData: false,
 		forceSync: false,
 		xhr: () => {
-			console.log(self.settings.data, self.fd);
+			// console.log(self.settings.data, self.fd);
 			var xhrobj = $.ajaxSettings.xhr();
 
 			if (xhrobj.upload) {
@@ -169,7 +169,7 @@ jqUpload.prototype.ajax = () => {
 			self.settings.onUploadSuccess.call(self.element, data);
 		},
 		error: (xhr, status, errMsg) => {
-			self.settings.onUploadError.call(self.element, self.queuePos, errMsg);
+			self.settings.onUploadError.call(self.element, errMsg);
 		},
 		complete: (xhr, textStatus) => {
 			self.settings.onComplete.call(self.element);

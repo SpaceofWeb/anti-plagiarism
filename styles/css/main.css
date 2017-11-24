@@ -18,3 +18,7 @@
 .progress {
 	border: 1px solid #2789dd;
 }
+
+[type="file"] {
+	outline: none !important;
+}

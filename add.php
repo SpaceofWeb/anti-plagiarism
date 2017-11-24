@@ -42,7 +42,7 @@ if ($res->num_rows > 0) {
 					</div><br>
 
 					<div class="input-group">
-						<input type="file" name="files" class="1custom-file-input">
+						<input type="file" name="files" class="custom-file-input1">
 						<!-- <span class="custom-file-control"></span> -->
 					</div><br>
 
@@ -142,7 +142,7 @@ var formAddDiploma = $('#formAddDiploma'),
 
 
 
-
+// Get selector options
 function getOptions(instance) {
 	$.ajax({
 		url: 'engine/ajax/getOptions.php',
@@ -157,12 +157,10 @@ function getOptions(instance) {
 			if (data.err) {
 				$.notify(data.err, 'error');
 			} else {
-				$.notify(data.msg, 'success');
-
 				if (instance == 'students') {
-					$('#groupSelect').html(data);
+					$('#student').html(data.data);
 				} else if (instance == 'groups') {
-					$('#student').html(data);
+					$('#groupSelect').html(data.data);
 				}
 			}
 		}
@@ -171,7 +169,7 @@ function getOptions(instance) {
 
 
 
-
+// Add group to db
 formAddGroup.on('submit', (e) => {
 	e.preventDefault();
 
@@ -188,8 +186,9 @@ formAddGroup.on('submit', (e) => {
 			if (data.err) {
 				$.notify(data.err, 'error');
 			} else {
+				$.notify(data.success, 'success');
+				formAddGroup[0].reset();
 				getOptions('groups');
-				$.notify(data.msg, 'success');
 			}
 		}
 	});
@@ -197,6 +196,7 @@ formAddGroup.on('submit', (e) => {
 
 
 
+// Add student to db
 formAddStudent.on('submit', (e) => {
 	e.preventDefault();
 
@@ -205,6 +205,7 @@ formAddStudent.on('submit', (e) => {
 		type: 'POST',
 		data: formAddStudent.serialize(),
 		success: (data) => {
+			console.log(data);
 			try {
 				data = JSON.parse(data);
 			} catch(e) {}
@@ -213,8 +214,9 @@ formAddStudent.on('submit', (e) => {
 			if (data.err) {
 				$.notify(data.err, 'error');
 			} else {
+				$.notify(data.success, 'success');
+				formAddStudent[0].reset();
 				getOptions('students');
-				$.notify(data.msg, 'success');
 			}
 		}
 	});
@@ -222,6 +224,7 @@ formAddStudent.on('submit', (e) => {
 
 
 
+// Load diploma and save in db
 formAddDiploma.jqUpload({
 	url: 'engine/ajax/addDiplomas.php',
 	dataType: 'json',
@@ -263,13 +266,14 @@ formAddDiploma.jqUpload({
 	onHaventFile: () => {
 		$.notify('Вы не выбрали файл', 'warn');
 	},
-	onUploadError: function(id, message){
+	onUploadError: function(message) {
+		console.log(message);
 		$.notify('Ошибка загрузки файла: ' + message, 'error');
 	},
-	onFileTypeError: function(file){
+	onFileTypeError: function(file) {
 		$.notify('Файл \'' + file.name + '\' должен быть с расширением ".docx"', 'error');
 	},
-	onFallbackMode: function(message){
+	onFallbackMode: function(message) {
 		$.notify('Браузер не поддерживается: ' + message, 'error');
 	}
 });

@@ -1,4 +1,5 @@
 <?php
+// die(json_encode(['success'=> 'died']));
 
 require_once '../data/db.php';
 require_once '../data/functions.php';
@@ -8,7 +9,7 @@ require_once '../data/docx2text.php';
 if (isset($_SESSION['token']) && (int)$_SESSION['token'] > time())
 	die(json_encode(['err'=> 'Токен не доступен, подождите '.((int)$_SESSION['token']-time()).' секунды']));
 
-$_SESSION['token'] = time()+3;
+$_SESSION['token'] = time()+2;
 
 
 
@@ -73,6 +74,7 @@ if (!move_uploaded_file($_FILES['file']['tmp_name'], $cfg['uploadDir'].$file)) {
 }
 
 
+
 // Parse file
 $d2t = new DocumentParser();
 $text = $d2t->parseFromFile($cfg['uploadDir'].$file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
@@ -80,7 +82,13 @@ $text = $d2t->parseFromFile($cfg['uploadDir'].$file, 'application/vnd.openxmlfor
 $text = escapeString($text, $db, ['trim', 'stripTags']);
 
 
-// Add to db
+// Get all id`s diplomas
+$q = "SELECT id FROM {$cfg['dbprefix']}_diplomas";
+$resIds = $db->query($q);
+
+
+
+// Add diploma to db
 $q = "INSERT INTO {$cfg['dbprefix']}_diplomas (text, year, addDate, file, student_id) 
 		VALUES('{$text}', '{$year}', '{$addDate}', '{$file}', '{$student}')";
 
@@ -89,8 +97,29 @@ if (!$db->query($q))
 	die(json_encode(['err'=> 'Не удалось сохранить дипломную студента в базе: ' . $db->error]));
 
 
+// Build query diplomas ids for percentage
+$q = "SELECT MAX(id) AS last FROM {$cfg['dbprefix']}_diplomas";
+$res = $db->query($q);
 
-die(json_encode(['err'=> 0]));
+if ($res->num_rows == 1) {
+	$last = $res->fetch_assoc()['last'];
+	$ids = '';
+
+	if ($resIds->num_rows > 0) {
+		while ($row = $resIds->fetch_assoc()) {
+			$ids .= '(\''.$last.'\', \''.$row['id'].'\'),';
+		}
+	}
+}
+
+
+// Add to db blanks for percentage
+echo$q = "INSERT INTO {$cfg['dbprefix']}_percentage (d1_id, d2_id) VALUES".substr($ids, 0, -1);
+if (!$db->query($q))
+	die(json_encode(['err'=> 'Error save blanks for percentage: '.$db->error]));
+
+
+die(json_encode(['success'=> 'Doploma success saved']));
 
 
 

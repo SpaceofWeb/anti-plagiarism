@@ -18,12 +18,14 @@ if ($instance == 'students') {
 
 	$html = '';
 	if ($res->num_rows > 0) {
+
+		$html = '<option value="0">-</option>';
+
 		while ($row = $res->fetch_assoc()) {
-			// GEN HTML
-			$a[] = $row;
+			$html .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
 		}
 
-		die(json_encode(['data'=> $a]));
+		die(json_encode(['data'=> $html]));
 	} else {
 		die(json_encode(['err'=> 'Записей не найдено']));
 	}
@@ -34,11 +36,14 @@ if ($instance == 'students') {
 	$res = $db->query($q);
 
 	if ($res->num_rows > 0) {
+
+		$html = '<option value="0">-</option>';
+
 		while ($row = $res->fetch_assoc()) {
-			$a[] = $row;
+			$html .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
 		}
 
-		die(json_encode(['data'=> $a]));
+		die(json_encode(['data'=> $html]));
 	} else {
 		die(json_encode(['err'=> 'Записей не найдено']));
 	}
