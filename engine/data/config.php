@@ -14,4 +14,6 @@ $cfg['dbuser'] = 'root';
 $cfg['dbpass'] = 'root';
 $cfg['dbname'] = 'antiplag';
 $cfg['dbprefix'] = 'ap';
-// $cfg[''] = '';
+
+
+

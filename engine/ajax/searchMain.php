@@ -32,14 +32,14 @@ if ($instance == 'diplomas') {
 			FROM {$cfg['dbprefix']}_percentage P 
 			LEFT JOIN {$cfg['dbprefix']}_diplomas D ON D.id=P.d2_id 
 			LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id 
-			WHERE P.d1_id='{$student}' 
+			WHERE P.d1_id='{$student}' AND P.percent IS NOT NULL 
 			ORDER BY P.percent DESC 
 			LIMIT ".$limit['d'].','.$cfg['rowsPerPage'];
 
 
 	$qCount = "SELECT COUNT(id) AS count 
 				FROM {$cfg['dbprefix']}_percentage 
-				WHERE d1_id='{$student}' ";
+				WHERE d1_id='{$student}' AND percent IS NOT NULL";
 
 
 // if we searching top diplomas
@@ -55,11 +55,14 @@ if ($instance == 'diplomas') {
 			LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id 
 			LEFT JOIN {$cfg['dbprefix']}_diplomas D2 ON D2.id=P.d2_id 
 			LEFT JOIN {$cfg['dbprefix']}_students S2 ON S2.id=D2.student_id 
+			WHERE P.percent IS NOT NULL
 			ORDER BY P.percent DESC 
 			LIMIT ".$limit['t'].','.$cfg['rowsPerPage'];
 
 
-	$qCount = "SELECT COUNT(id) AS count FROM {$cfg['dbprefix']}_percentage";
+	$qCount = "SELECT COUNT(id) AS count 
+				FROM {$cfg['dbprefix']}_percentage 
+				WHERE percent IS NOT NULL";
 
 }
 

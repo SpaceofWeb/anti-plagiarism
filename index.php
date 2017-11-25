@@ -184,7 +184,10 @@ foreach (['t'=> 0] as $key => $val) {
 <?php
 
 // Get top diplomas count
-$q = "SELECT COUNT(P.id) AS count FROM {$cfg['dbprefix']}_percentage P ";
+$q = "SELECT COUNT(id) AS count 
+		FROM {$cfg['dbprefix']}_percentage 
+		WHERE percent IS NOT NULL";
+
 $resCount = $db->query($q);
 
 if ($resCount->num_rows == 1) {
@@ -207,6 +210,7 @@ $q = "SELECT P.percent,
 		LEFT JOIN ap_students S ON S.id=D.student_id 
 		LEFT JOIN ap_diplomas D2 ON D2.id=P.d2_id 
 		LEFT JOIN ap_students S2 ON S2.id=D2.student_id 
+		WHERE P.percent IS NOT NULL
 		ORDER BY P.percent DESC 
 		LIMIT ".$limit['t'].','.$cfg['rowsPerPage'];
 
