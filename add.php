@@ -228,6 +228,7 @@ formAddStudent.on('submit', (e) => {
 formAddDiploma.jqUpload({
 	url: 'engine/ajax/addDiplomas.php',
 	dataType: 'json',
+	// dataType: 'text',
 	allowedTypes: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 	extFilter: 'docx',
 	getData: () => {

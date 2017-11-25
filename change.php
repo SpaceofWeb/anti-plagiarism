@@ -633,7 +633,7 @@ function setPagination(current, count, instance) {
 	var all = Math.ceil(count/rowsPerPage);
 	all = (all == 0) ? 1 : all;
 
-	console.log(current, count, instance);
+	// console.log(current, count, instance);
 
 	if (current <= 1) {
 		$('#'+instance+'Pag').find('li.first').addClass('disabled');
@@ -682,7 +682,7 @@ function getPage() {
 
 
 
-
+// Arrray to querystring
 function toQueryString(a) {
 	var out = [];
 

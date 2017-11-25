@@ -53,7 +53,10 @@ $q = "SELECT id FROM {$cfg['dbprefix']}_diplomas WHERE student_id='{$student}' "
 $res = $db->query($q);
 
 if ($res->num_rows > 0) {
-	die(json_encode(['err'=> 'В базе уже есть дипломная работа этого студента. Что бы сохранить новую удалите старую']));
+	die(json_encode([
+		'err'=> 'В базе уже есть дипломная работа этого студента. 
+					Что бы сохранить новую удалите старую'
+	]));
 }
 
 
@@ -114,7 +117,7 @@ if ($res->num_rows == 1) {
 
 
 // Add to db blanks for percentage
-echo$q = "INSERT INTO {$cfg['dbprefix']}_percentage (d1_id, d2_id) VALUES".substr($ids, 0, -1);
+$q = "INSERT INTO {$cfg['dbprefix']}_percentage (d1_id, d2_id) VALUES".substr($ids, 0, -1);
 if (!$db->query($q))
 	die(json_encode(['err'=> 'Error save blanks for percentage: '.$db->error]));
 
