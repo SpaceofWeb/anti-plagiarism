@@ -122,6 +122,9 @@ if (!$db->query($q))
 	die(json_encode(['err'=> 'Error save blanks for percentage: '.$db->error]));
 
 
+exec('node ../bgproc/timer.js > /dev/null &');
+
+
 die(json_encode(['success'=> 'Doploma success saved']));
 
 
