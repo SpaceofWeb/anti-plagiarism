@@ -38,7 +38,8 @@ $instance = checkData($_POST['instance'], 'instance');
 if ($instance == 'students') {
 
 	$q = "SELECT id, CONCAT(firstName, ' ', middleName, ' ', SUBSTR(lastName, 1, 1), '.') AS name 
-			FROM {$cfg['dbprefix']}_students ORDER BY firstName, middleName";
+			FROM {$cfg['dbprefix']}_students 
+			ORDER BY firstName, middleName";
 
 	$res = $db->query($q);
 

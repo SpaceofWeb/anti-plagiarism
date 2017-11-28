@@ -112,29 +112,23 @@ if ($res->num_rows == 1) {
 		while ($row = $resIds->fetch_assoc()) {
 			$ids .= '(\''.$last.'\', \''.$row['id'].'\'),';
 		}
+
+
+		// Add to db blanks for percentage
+		$q = "INSERT INTO {$cfg['dbprefix']}_percentage (d1_id, d2_id) VALUES".substr($ids, 0, -1);
+		if (!$db->query($q))
+			die(json_encode(['err'=> 'Ошибка сохранения пустых значений для таблицы percentage: '.$db->error]));
+
+
+		
+		exec('node ../bgproc/timer.js > /dev/null &');
+		
+		die(json_encode(['success'=> 'Дипломная успешно сохранена']));
+	} else {
+		die(json_encode([]));
 	}
+} else {
+	die(json_encode(['err'=> 'Ошибка, не удалось проверить количество записей в базе']));
 }
-
-
-// Add to db blanks for percentage
-$q = "INSERT INTO {$cfg['dbprefix']}_percentage (d1_id, d2_id) VALUES".substr($ids, 0, -1);
-if (!$db->query($q))
-	die(json_encode(['err'=> 'Error save blanks for percentage: '.$db->error]));
-
-
-exec('node ../bgproc/timer.js > /dev/null &');
-
-
-die(json_encode(['success'=> 'Doploma success saved']));
-
-
-
-
-
-
-
-
-
-
 
 

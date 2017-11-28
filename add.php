@@ -16,7 +16,7 @@ require_once 'engine/static/header.php';
 
 				<form method="POST" id="formAddDiploma" enctype="multipart/form-data">
 					<div class="input-group">
-						<span class="input-group-addon bgcolor">Student</span>
+						<span class="input-group-addon bgcolor">Студент</span>
 						<select class="form-control" name="student" id="student">
 							<option value="0">-</option>
 <?php
@@ -37,7 +37,7 @@ if ($res->num_rows > 0) {
 					</div><br>
 
 					<div class="input-group">
-						<span class="input-group-addon bgcolor">Add year</span>
+						<span class="input-group-addon bgcolor">Год сдачи</span>
 						<input type="text" class="form-control" name="year" id="year" value="<?=date("Y"); ?>">
 					</div><br>
 
@@ -79,7 +79,7 @@ if ($res->num_rows > 0) {
 					</div><br>
 
 					<div class="input-group">
-						<span class="input-group-addon bgcolor">Group</span>
+						<span class="input-group-addon bgcolor">Группа</span>
 						<select class="form-control" name="group" id="groupSelect">
 							<option value="0">-</option>
 <?php
@@ -110,7 +110,7 @@ if ($res->num_rows > 0) {
 
 				<form method="POST" id="formAddGroup" name="form">
 					<div class="input-group">
-						<span class="input-group-addon bgcolor">Group name</span>
+						<span class="input-group-addon bgcolor">Имя группы</span>
 						<input type="text" class="form-control" id="group" name="group">
 					</div><br>
 
@@ -129,11 +129,6 @@ if ($res->num_rows > 0) {
 <script>
 
 $(document).ready(() => {
-
-function getNode(s) {
-	return document.getElementById(s);
-}
-
 
 
 var formAddDiploma = $('#formAddDiploma'),

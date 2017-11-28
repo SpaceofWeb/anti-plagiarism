@@ -73,7 +73,7 @@ function say(s, cb) {
 
 function repeat() {
 
-	var e = exec('php '+__dirname+'/comparsion.php', (err, stdout, sdterr) => {
+	var e = exec('php '+__dirname+'/compare.php', (err, stdout, sdterr) => {
 		if (err) {
 			say('err: '+err, () => {exit();});
 		}

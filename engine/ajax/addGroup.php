@@ -1,5 +1,4 @@
 <?php
-die(json_encode(['success'=> 'died']));
 
 require_once '../data/db.php';
 require_once '../data/functions.php';

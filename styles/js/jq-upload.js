@@ -14,8 +14,10 @@ var defaults = {
 	data: {},
 	allowedTypes: '*',
 	extFilter: null,
-	dataType: null,
+	// dataType: null,
+	dataType: 'text',
 	fileName: 'file',
+	checkForFile: true,
 	onInit: () => {},
 	onBadBrowser: (message) => {},
 	onBeforeUpload: () => {},
@@ -72,10 +74,15 @@ jqUpload.prototype.init = () => {
 	self.element.on('submit', (e) => {
 		e.preventDefault();
 
-		if (self.element.find('[type=file]')[0].files.length > 0) {
-			self.ajax();
+		if (self.settings.checkForFile) {
+			if (self.element.find('[type=file]')[0].files.length > 0) {
+				self.ajax();
+			} else {
+				self.settings.onHaventFile.call(self.element);
+			}
 		} else {
-			self.settings.onHaventFile.call(self.element);
+			self.getFormData();
+			self.ajax();
 		}
 	});
 };
@@ -167,6 +174,8 @@ jqUpload.prototype.ajax = () => {
 		},
 		success: (data, message, xhr) => {
 			self.settings.onUploadSuccess.call(self.element, data);
+			delete self.file;
+			delete self.fd;
 		},
 		error: (xhr, status, errMsg) => {
 			self.settings.onUploadError.call(self.element, errMsg);

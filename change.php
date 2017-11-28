@@ -58,6 +58,7 @@ if ($resCount->num_rows == 1) {
 }
 
 $all = ceil($count/$cfg['rowsPerPage']);
+$all = ($all == 0) ? 1 : $all;
 
 
 // Get diplomas
@@ -78,9 +79,9 @@ if ($res->num_rows > 0) {
 <tr>
 	<td><?=$row['name']; ?></td>
 	<td class="right">
-		<button type="button" class="btn btn-warning btn-sm" 
-				data-toggle="modal" data-target="#diplomas" data-id="<?=$row['id']; ?>">♻</button>
-		<button type="button" class="btn btn-danger btn-sm btnDelete" data-id="<?=$row['id']; ?>">X</button>
+		<button type="button" class="btn btn-warning btn-sm btnChange" data-toggle="modal"
+				data-target="#diplomas" data-instance="diplomas" data-id="<?=$row['id']; ?>">♻</button>
+		<!-- <button type="button" class="btn btn-danger btn-sm btnDelete" data-id="<?=$row['id']; ?>">X</button> -->
 	</td>
 </tr>
 
@@ -159,6 +160,7 @@ if ($resCount->num_rows == 1) {
 }
 
 $all = ceil($count/$cfg['rowsPerPage']);
+$all = ($all == 0) ? 1 : $all;
 
 
 // Get students
@@ -177,9 +179,9 @@ if ($res->num_rows > 0) {
 <tr>
 	<td><?=$row['name']; ?></td>
 	<td class="right">
-		<button type="button" class="btn btn-warning btn-sm" 
-				data-toggle="modal" data-target="#students" data-id="<?=$row['id']; ?>">♻</button>
-		<button type="button" class="btn btn-danger btn-sm btnDelete" data-id="<?=$row['id']; ?>">X</button>
+		<button type="button" class="btn btn-warning btn-sm btnChange" data-toggle="modal"
+				data-target="#students" data-instance="students" data-id="<?=$row['id']; ?>">♻</button>
+		<!-- <button type="button" class="btn btn-danger btn-sm btnDelete" data-id="<?=$row['id']; ?>">X</button> -->
 	</td>
 </tr>
 
@@ -257,6 +259,7 @@ if ($resCount->num_rows == 1) {
 }
 
 $all = ceil($count/$cfg['rowsPerPage']);
+$all = ($all == 0) ? 1 : $all;
 
 
 // Get groups
@@ -274,9 +277,9 @@ if ($res->num_rows > 0) {
 <tr>
 	<td><?=$row['name']; ?></td>
 	<td class="right">
-		<button type="button" class="btn btn-warning btn-sm" 
-				data-toggle="modal" data-target="#groups" data-id="<?=$row['id']; ?>">♻</button>
-		<button type="button" class="btn btn-danger btn-sm btnDelete" data-id="<?=$row['id']; ?>">X</button>
+		<button type="button" class="btn btn-warning btn-sm btnChange" data-toggle="modal" 
+				data-target="#groups" data-instance="groups" data-id="<?=$row['id']; ?>">♻</button>
+		<!-- <button type="button" class="btn btn-danger btn-sm btnDelete" data-id="<?=$row['id']; ?>">X</button> -->
 	</td>
 </tr>
 
@@ -337,31 +340,33 @@ if ($res->num_rows > 0) {
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">
-				<form method="POST">
+			<form method="POST" id="formChangeDiploma">
+				<div class="modal-body">
 					<div class="input-group">
 						<span class="input-group-addon bgcolor">Студент</span>
-						<select class="form-control" name="student">
-							<option>-</option>
-							<option>Хадзиев Герман</option>
-							<option>firstName middleName</option>
-						</select>
-					</div><br>
-
-					<div class="input-group">
-						<input type="file" name="doc" class="custom-file-input">
-						<span class="custom-file-control"></span>
+						<select class="form-control" name="student"></select>
 					</div><br>
 
 					<div class="input-group">
 						<span class="input-group-addon bgcolor">Год защиты</span>
-						<input type="text" class="form-control" name="year" value="<?=date("Y"); ?>">
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success">Сохранить</button>
-			</div>
+						<input type="text" class="form-control" name="year">
+					</div><br>
+
+					<div class="input-group">
+						<input type="file" name="doc" class="custom-file-input1">
+						<!-- <span class="custom-file-control"></span> -->
+					</div><br>
+
+					<div id="progress" class="progress">
+						<div class="progress-bar progress-bar-striped" role="progressbar" style="width:0%" 
+								aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+					</div><br>
+					<input type="hidden" name="id">
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success">Сохранить</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -377,8 +382,8 @@ if ($res->num_rows > 0) {
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">
-				<form method="POST">
+			<form method="POST">
+				<div class="modal-body">
 					<div class="input-group">
 						<span class="input-group-addon bgcolor">Фамилия</span>
 						<input type="text" class="form-control" name="firstName">
@@ -396,17 +401,15 @@ if ($res->num_rows > 0) {
 
 					<div class="input-group">
 						<span class="input-group-addon bgcolor">Грппа</span>
-						<select class="form-control" name="group">
-							<option>-</option>
-							<option>group</option>
-							<option>group</option>
-						</select>
+						<select class="form-control" name="group"></select>
 					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success">Сохранить</button>
-			</div>
+					<input type="hidden" name="id">
+					<input type="hidden" name="instance">
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success">Сохранить</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -422,22 +425,24 @@ if ($res->num_rows > 0) {
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">
-				<form method="POST">
-					<div class="input-group">
-						<span class="input-group-addon bgcolor">Название группы</span>
-						<input type="text" class="form-control" name="group">
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success">Сохранить</button>
-			</div>
+			<form method="POST">
+				<div class="modal-body">
+						<div class="input-group">
+							<span class="input-group-addon bgcolor">Название группы</span>
+							<input type="hidden" name="id">
+							<input type="hidden" name="instance">
+							<input type="text" class="form-control" name="group">
+						</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success">Сохранить</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
 
-
+<script src="styles/js/jq-upload.js"></script>
 
 <script>
 
@@ -450,7 +455,11 @@ var rowsPerPage = <?=$cfg['rowsPerPage']; ?>,
 	gSearch = $('#gSearch'),
 	tableDiplomas  = $('#tableDiplomas'),
 	tableStudents  = $('#tableStudents'),
-	tableGroups    = $('#tableGroups');
+	tableGroups    = $('#tableGroups'),
+	dModalForm = $('#diplomas form'),
+	sModalForm = $('#students form'),
+	gModalForm = $('#groups form'),
+	formChangeDiploma = $('#formChangeDiploma');
 
 
 
@@ -498,7 +507,7 @@ $('#gForm').on('input', (e) => {
 		history.pushState({}, '', '?'+toQueryString(p));
 	});
 });
-
+// ==========================
 
 
 
@@ -546,6 +555,7 @@ $('#groupsPag a').on('click', (e) => {
 		history.pushState({}, '', '?'+toQueryString(p));
 	});
 });
+// ==========================
 
 
 
@@ -555,16 +565,167 @@ $('#groupsPag a').on('click', (e) => {
 
 
 
+// Change event
+changeEvents();
+
+function changeEvents() {
+	$('.btnChange').off('click');
+
+	$('.btnChange').on('click', (e) => {
+		e.preventDefault();
+
+		var id = e.target.dataset.id,
+			instance = e.target.dataset.instance;
+
+		getRow(instance, id, (data) => {
+			switch(instance) {
+				case 'diplomas':
+					dModalForm.find('[name="id"]').val(id);
+					dModalForm.find('[name="year"]').val(data.year);
+					dModalForm.find('[name="student"]').html(data.students);
+					dModalForm.find('[name="instance"]').val('students');
+				break;
+				case 'students':
+					sModalForm.find('[name="id"]').val(id);
+					sModalForm.find('[name="firstName"]').val(data.firstName);
+					sModalForm.find('[name="middleName"]').val(data.middleName);
+					sModalForm.find('[name="lastName"]').val(data.lastName);
+					sModalForm.find('[name="group"]').html(data.groups);
+					sModalForm.find('[name="instance"]').val('students');
+				break;
+				case 'groups':
+					gModalForm.find('[name="id"]').val(id);
+					gModalForm.find('[name="group"]').val(data.name);
+					gModalForm.find('[name="instance"]').val('groups');
+				break;
+			}
+		});
+
+	});
+}
 
 
-// Searching
-function search(s, instance, pagin, cb) {
-	// console.log(pagin);
+
+// Submit modal forms
+dModalForm.on('submit', (e) => {
+	e.preventDefault();
+
+
+});
+
+
+sModalForm.on('submit', (e) => {
+	e.preventDefault();
+
+	setChange('students');
+});
+
+
+gModalForm.on('submit', (e) => {
+	e.preventDefault();
+
+	setChange('groups');
+});
+// ==========================
+
+
+// Reload rows after change
+function reload(instance) {
+	var p = getPage();
+	
+	if (instance == 'diplomas') {
+
+		search(dSearch.val(), 'diplomas', p, (data, count) => {
+			setResults(data, 'diplomas');
+		});
+
+	} else if (instance == 'students') {
+
+		search(sSearch.val(), 'students', p, (data, count) => {
+			setResults(data, 'students');
+		});
+
+	} else if (instance == 'groups') {
+
+		search(gSearch.val(), 'groups', p, (data, count) => {
+			setResults(data, 'groups');
+		});
+	}
+}
+
+
+// Load diploma and save in db
+formChangeDiploma.jqUpload({
+	url: 'engine/ajax/setChange.php',
+	dataType: 'json',
+	// dataType: 'text',
+	allowedTypes: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+	extFilter: 'docx',
+	checkForFile: false,
+	getData: () => {
+		return {
+			id: formChangeDiploma.find('[name="id"]').val(),
+			year: formChangeDiploma.find('[name="year"]').val(),
+			student: formChangeDiploma.find('[name="student"]').val(),
+			instance: 'diplomas'
+		};
+	},
+	onBeforeUpload: function() {
+		$.notify('Загрузка начата', 'info');
+	},
+	onUploadProgress: function(percent) {
+		$('div.progress-bar').width(percent + '%');
+	},
+	onUploadSuccess: function(data) {
+		try {
+			data = JSON.parse(data);
+		} catch(e) {}
+
+		console.log("Server Response: \n", data);
+
+		if (data.err) {
+			$.notify(data.err, 'error');
+			$('div.progress-bar').width('0%');
+		} else {
+			$.notify('Дипломная работа успешно сохранена', 'success');
+			$('div.progress-bar').width('100%');
+
+			formChangeDiploma.find('[type="file"]').val('');
+
+			setTimeout(() => {
+				$('div.progress-bar').width('0%');
+			}, 2000);
+		}
+	},
+	onUploadError: function(message) {
+		console.log(message);
+		$.notify('Ошибка загрузки файла: ' + message, 'error');
+	},
+	onFileTypeError: function(file) {
+		$.notify('Файл \'' + file.name + '\' должен быть с расширением ".docx"', 'error');
+	},
+	onFallbackMode: function(message) {
+		$.notify('Браузер не поддерживается: ' + message, 'error');
+	}
+});
+
+
+
+
+// Set changes from modal forms
+function setChange(instance) {
+	if (instance == 'students') {
+		var data = sModalForm.serialize();
+	} else if (instance == 'groups') {
+		var data = gModalForm.serialize();
+	}
+
+
 	$.ajax({
-		url: 'engine/ajax/search.php',
+		url: 'engine/ajax/setChange.php',
 		type: 'POST',
 		cache: false,
-		data: {'s': s, 'instance': instance, 'pagin': pagin},
+		data: data,
 		success: (data) => {
 			console.log(data);
 			try {
@@ -574,15 +735,33 @@ function search(s, instance, pagin, cb) {
 			// if error
 			if (data.err) {
 				$.notify(data.err, 'error');
-				return;
+			} else {
+				$.notify(data.success, 'success');
 			}
 
-			// if warn
-			// if (data.warn) {
-				// $.notify(data.warn, 'warn');
-				// return;
-			// }
+			reload(data.instance);
+		}
+	});
+}
 
+
+// Searching
+function search(s, instance, pagin, cb) {
+	$.ajax({
+		url: 'engine/ajax/search.php',
+		type: 'POST',
+		cache: false,
+		data: {'s': s, 'instance': instance, 'pagin': pagin},
+		success: (data) => {
+			try {
+				data = JSON.parse(data);
+			} catch(e) {}
+
+			// if error
+			if (data.err) {
+				$.notify(data.err, 'error');
+				return;
+			}
 
 			cb(data.data, data.count);
 		}
@@ -599,11 +778,13 @@ function setResults(data, instance) {
 		html += '<tr>\
 					<td>'+data[i].name+'</td>\
 					<td class="right">\
-						<button type="button" class="btn btn-warning btn-sm" \
-								data-toggle="modal" data-target="#'+instance+'" data-id="'+data[i].id+'">♻</button>\
-						<button type="button" class="btn btn-danger btn-sm btnDelete" data-id="'+data[i].id+'">X</button>\
+						<button type="button" class="btn btn-warning btn-sm btnChange"\
+								data-toggle="modal" data-target="#'+instance+'"\
+								data-instance="'+instance+'" data-id="'+data[i].id+'">♻</button>\
 					</td>\
 				</tr>';
+						// <button type="button" class="btn btn-danger btn-sm btnDelete"\
+						// 		data-id="'+data[i].id+'">X</button>\
 	}
 
 
@@ -655,6 +836,7 @@ function setPagination(current, count, instance) {
 		$('#'+instance+'Pag').find('li.last>a').attr('data-page', current+1);
 	}
 
+	changeEvents();
 }
 
 
@@ -675,6 +857,28 @@ function getPage() {
 }
 
 
+
+// Get row for change modal
+function getRow(instance, id, cb) {
+	$.ajax({
+		url: 'engine/ajax/getRow.php',
+		type: 'POST',
+		data: {instance: instance, id: id},
+		success: (data) => {
+			try {
+				data = JSON.parse(data);
+			} catch(e) {}
+
+			// if error
+			if (data.err) {
+				$.notify(data.err, 'error');
+				return;
+			}
+
+			cb(data.data);
+		}
+	});
+}
 
 
 

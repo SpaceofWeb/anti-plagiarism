@@ -25,23 +25,15 @@ foreach (['t'=> 0] as $key => $val) {
 			<div class="jumbotron pb-md-2">
 				<h4>Сортировка по студенту</h4><br>
 
-				<!-- <form class="form-inline"> -->
-					<div class="form-group row">
-						<!-- <label>Example select</label> -->
-						<div class="col-md-6">
-							<div class="input-group">
-								<span class="input-group-addon bgcolor">Студент</span>
-								<input type="text" id="search" class="form-control">
-								<input type="hidden" id="studentHidden">
-								<!-- <select class="form-control">
-									<option>-</option>
-									<option>Хадзиев Герман</option>
-									<option>Хадзиев Герман</option>
-								</select> -->
-							</div>
+				<div class="form-group row">
+					<div class="col-md-12">
+						<div class="input-group">
+							<span class="input-group-addon bgcolor">Студент</span>
+							<input type="text" id="search" class="form-control">
+							<input type="hidden" id="studentHidden">
 						</div>
 					</div>
-				<!-- </form><br> -->
+				</div>
 
 				<table class="table table-stripped">
 					<thead>
@@ -108,6 +100,7 @@ if ($resCount->num_rows == 1) {
 }
 
 $all = ceil($count/$cfg['rowsPerPage']);
+$all = ($all == 0) ? 1 : $all;
 
 
 // Get top diplomas
@@ -136,7 +129,7 @@ if ($res->num_rows > 0) {
 	}
 } else {
 	echo '<tr>
-			<td colspan="3"><font color="red">Not found</font></td>
+			<td colspan="3"><font color="red">Ни одной записи не найдено</font></td>
 		</tr>';
 }
 
@@ -172,8 +165,8 @@ if ($res->num_rows > 0) {
 	</div>
 </div>
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link href="styles/css/jquery-ui.css" rel="stylesheet">
+<script src="styles/js/jquery-ui.js"></script>
 
 <script>
 

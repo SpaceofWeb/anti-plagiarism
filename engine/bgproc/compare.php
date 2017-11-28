@@ -15,9 +15,9 @@ $logFile = '../bgproc/logs/'.date("Ym").'.log';
 
 
 $q = "SELECT P.id, D.text AS d, D2.text AS d2 
-		FROM ap_percentage1 P 
-		LEFT JOIN ap_diplomas1 D ON P.d1_id=D.id 
-		LEFT JOIN ap_diplomas1 D2 ON P.d2_id=D2.id 
+		FROM {$cfg['dbprefix']}_percentage P 
+		LEFT JOIN {$cfg['dbprefix']}_diplomas D ON P.d1_id=D.id 
+		LEFT JOIN {$cfg['dbprefix']}_diplomas D2 ON P.d2_id=D2.id 
 		WHERE P.percent IS NULL 
 		ORDER BY P.id LIMIT 1";
 
@@ -31,7 +31,7 @@ if ($res->num_rows == 1) {
 
 	$p = (int)$p;
 
-	$q = "UPDATE ap_percentage1 SET percent='".$p."' WHERE id='".$row['id']."' ";
+	$q = "UPDATE {$cfg['dbprefix']}_percentage SET percent='".$p."' WHERE id='".$row['id']."' ";
 	if ($db->query($q)) {
 		setLog($logFile, 'added id: '.$row['id'].', '.$p.'%');
 	} else {
@@ -43,9 +43,4 @@ if ($res->num_rows == 1) {
 } else {
 	die('norepeat');
 }
-
-
-
-
-
 
