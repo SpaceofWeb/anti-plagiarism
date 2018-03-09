@@ -200,7 +200,6 @@ formAddStudent.on('submit', (e) => {
 		type: 'POST',
 		data: formAddStudent.serialize(),
 		success: (data) => {
-			console.log(data);
 			try {
 				data = JSON.parse(data);
 			} catch(e) {}

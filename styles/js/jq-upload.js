@@ -175,7 +175,7 @@ jqUpload.prototype.ajax = () => {
 		success: (data, message, xhr) => {
 			self.settings.onUploadSuccess.call(self.element, data);
 			delete self.file;
-			delete self.fd;
+			// delete self.fd;
 		},
 		error: (xhr, status, errMsg) => {
 			self.settings.onUploadError.call(self.element, errMsg);

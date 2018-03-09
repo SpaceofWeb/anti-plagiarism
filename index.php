@@ -47,7 +47,7 @@ foreach (['t'=> 0] as $key => $val) {
 				<nav aria-label="Diplomas search results">
 					<ul id="diplomasPag" class="pagination pagination-sm justify-content-center">
 						<li class="page-item first disabled">
-							<a class="page-link first" href="#" aria-label="Previous" 
+							<a class="page-link first" href="#" aria-label="Previous"
 									data-page="1">
 								<span aria-hidden="true">&laquo;</span>
 								<span class="sr-only">Previous</span>
@@ -59,7 +59,7 @@ foreach (['t'=> 0] as $key => $val) {
 							</span>
 						</li>
 						<li class="page-item last disabled">
-							<a class="page-link last" href="#" aria-label="Next" 
+							<a class="page-link last" href="#" aria-label="Next"
 									data-page="2">
 								<span aria-hidden="true">&raquo;</span>
 								<span class="sr-only">Next</span>
@@ -87,8 +87,8 @@ foreach (['t'=> 0] as $key => $val) {
 <?php
 
 // Get top diplomas count
-$q = "SELECT COUNT(id) AS count 
-		FROM {$cfg['dbprefix']}_percentage 
+$q = "SELECT COUNT(id) AS count
+		FROM {$cfg['dbprefix']}_percentage
 		WHERE percent IS NOT NULL";
 
 $resCount = $db->query($q);
@@ -104,18 +104,18 @@ $all = ($all == 0) ? 1 : $all;
 
 
 // Get top diplomas
-$q = "SELECT P.percent, 
-			CONCAT(S.firstName, ' ', SUBSTR(S.middleName, 1, 1), '. ', 
-									SUBSTR(S.lastName, 1, 1), '.') AS name, 
-			CONCAT(S2.firstName, ' ', SUBSTR(S2.middleName, 1, 1), '. ', 
-									SUBSTR(S2.lastName, 1, 1), '.') AS name2 
-		FROM ap_percentage P 
-		LEFT JOIN ap_diplomas D ON D.id=P.d1_id 
-		LEFT JOIN ap_students S ON S.id=D.student_id 
-		LEFT JOIN ap_diplomas D2 ON D2.id=P.d2_id 
-		LEFT JOIN ap_students S2 ON S2.id=D2.student_id 
+$q = "SELECT P.percent,
+			CONCAT(S.firstName, ' ', SUBSTR(S.middleName, 1, 1), '. ',
+									SUBSTR(S.lastName, 1, 1), '.') AS name,
+			CONCAT(S2.firstName, ' ', SUBSTR(S2.middleName, 1, 1), '. ',
+									SUBSTR(S2.lastName, 1, 1), '.') AS name2
+		FROM ap_percentage P
+		LEFT JOIN ap_diplomas D ON D.id=P.d1_id
+		LEFT JOIN ap_students S ON S.id=D.student_id
+		LEFT JOIN ap_diplomas D2 ON D2.id=P.d2_id
+		LEFT JOIN ap_students S2 ON S2.id=D2.student_id
 		WHERE P.percent IS NOT NULL
-		ORDER BY P.percent DESC 
+		ORDER BY P.percent DESC
 		LIMIT ".$limit['t'].','.$cfg['rowsPerPage'];
 
 $res = $db->query($q);
@@ -140,7 +140,7 @@ if ($res->num_rows > 0) {
 				<nav aria-label="Top diplomas search results">
 					<ul id="topDiplomasPag" class="pagination pagination-sm justify-content-center">
 						<li class="page-item first<?=($pag['t'] <= 1) ? ' disabled' : ''; ?>">
-							<a class="page-link first" href="#" aria-label="Previous" 
+							<a class="page-link first" href="#" aria-label="Previous"
 									data-page="<?=($pag['t'] <= 1) ? 1 : $pag['t']-1; ?>">
 								<span aria-hidden="true">&laquo;</span>
 								<span class="sr-only">Previous</span>
@@ -152,7 +152,7 @@ if ($res->num_rows > 0) {
 							</span>
 						</li>
 						<li class="page-item last<?=($pag['t'] >= $all) ? ' disabled' : ''; ?>">
-							<a class="page-link last" href="#" aria-label="Next" 
+							<a class="page-link last" href="#" aria-label="Next"
 									data-page="<?=($pag['t'] >= $count) ? $count : $pag['t']+1; ?>">
 								<span aria-hidden="true">&raquo;</span>
 								<span class="sr-only">Next</span>
@@ -361,15 +361,3 @@ function toQueryString(a) {
 <?php
 
 require_once 'engine/static/footer.php';
-
-
-
-
-
-
-
-
-
-
-
-

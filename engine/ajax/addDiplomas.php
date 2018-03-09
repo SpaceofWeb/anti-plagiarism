@@ -1,5 +1,4 @@
 <?php
-// die(json_encode(['success'=> 'died']));
 
 require_once '../data/db.php';
 require_once '../data/functions.php';
@@ -17,10 +16,6 @@ $_SESSION['token'] = time()+2;
 
 // Check for file, student and year
 if (!isset($_FILES['file'])) {
-	die(json_encode(['err'=> 'Параметр "file" не найден']));
-}
-
-if ($_FILES['file']['error']) {
 	die(json_encode(['err'=> 'Параметр "file" не найден']));
 }
 
@@ -77,10 +72,14 @@ if (!move_uploaded_file($_FILES['file']['tmp_name'], $cfg['uploadDir'].$file)) {
 }
 
 
-
+try {
 // Parse file
 $d2t = new DocumentParser();
 $text = $d2t->parseFromFile($cfg['uploadDir'].$file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+
+} catch(Exeption $e) {
+	die(json_encode(['err'=> 'Ошибка парсинга файлов']));
+}
 
 $text = escapeString($text, $db, ['trim', 'stripTags']);
 
@@ -125,7 +124,7 @@ if ($res->num_rows == 1) {
 		
 		die(json_encode(['success'=> 'Дипломная успешно сохранена']));
 	} else {
-		die(json_encode([]));
+		die(json_encode([1]));
 	}
 } else {
 	die(json_encode(['err'=> 'Ошибка, не удалось проверить количество записей в базе']));
