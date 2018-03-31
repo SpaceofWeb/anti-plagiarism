@@ -6,7 +6,7 @@ require_once 'engine/static/header.php';
 
 
 
-// Pagination
+// Пагинация
 $limit = [];
 
 foreach (['d'=> 0, 's'=> 0, 'g'=> 0] as $key => $val) {
@@ -24,7 +24,7 @@ foreach (['d'=> 0, 's'=> 0, 'g'=> 0] as $key => $val) {
 			<div class="jumbotron pb-md-1">
 				<h4>Изменить диплом</h4><br>
 
-				
+
 				<form id="dForm" class="form-inline mt-2 mt-md-0">
 					<div class="row">
 						<div class="col-lg-12">
@@ -45,9 +45,9 @@ foreach (['d'=> 0, 's'=> 0, 'g'=> 0] as $key => $val) {
 
 <?php
 
-// Get diplomas count
-$q = "SELECT COUNT(D.id) AS count 
-		FROM {$cfg['dbprefix']}_diplomas D 
+// Выбрать количество дипломных
+$q = "SELECT COUNT(D.id) AS count
+		FROM {$cfg['dbprefix']}_diplomas D
 		LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id ";
 
 $resCount = $db->query($q);
@@ -61,11 +61,11 @@ $all = ceil($count/$cfg['rowsPerPage']);
 $all = ($all == 0) ? 1 : $all;
 
 
-// Get diplomas
-$q = "SELECT D.id, CONCAT(S.firstName, ' ', SUBSTR(S.middleName, 1, 1), '. ', SUBSTR(S.lastName, 1, 1), '.') AS name 
-		FROM {$cfg['dbprefix']}_diplomas D 
-		LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id 
-		ORDER BY S.firstName, S.middleName, S.lastName 
+// Выбрать список дипломных
+$q = "SELECT D.id, CONCAT(S.firstName, ' ', SUBSTR(S.middleName, 1, 1), '. ', SUBSTR(S.lastName, 1, 1), '.') AS name
+		FROM {$cfg['dbprefix']}_diplomas D
+		LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id
+		ORDER BY S.firstName, S.middleName, S.lastName
 		LIMIT ".$limit['d'].','.$cfg['rowsPerPage'];
 
 
@@ -101,7 +101,7 @@ if ($res->num_rows > 0) {
 				<nav aria-label="Diplomas search results">
 					<ul id="diplomasPag" class="pagination pagination-sm justify-content-center">
 						<li class="page-item first<?=($pag['d'] <= 1) ? ' disabled' : ''; ?>">
-							<a class="page-link first" href="#" aria-label="Previous" 
+							<a class="page-link first" href="#" aria-label="Previous"
 									data-page="<?=($pag['d'] <= 1) ? 1 : $pag['d']-1; ?>">
 								<span aria-hidden="true">&laquo;</span>
 								<span class="sr-only">Previous</span>
@@ -113,7 +113,7 @@ if ($res->num_rows > 0) {
 							</span>
 						</li>
 						<li class="page-item last<?=($pag['d'] >= $all) ? ' disabled' : ''; ?>">
-							<a class="page-link last" href="#" aria-label="Next" 
+							<a class="page-link last" href="#" aria-label="Next"
 									data-page="<?=($pag['d'] >= $all) ? $all : $pag['d']+1; ?>">
 								<span aria-hidden="true">&raquo;</span>
 								<span class="sr-only">Next</span>
@@ -128,7 +128,7 @@ if ($res->num_rows > 0) {
 			<div class="jumbotron pb-md-1">
 				<h4>Изменить студента</h4><br>
 
-				
+
 				<form id="sForm" class="form-inline mt-2 mt-md-0 was-validated">
 					<div class="row">
 						<div class="col-lg-12">
@@ -149,7 +149,7 @@ if ($res->num_rows > 0) {
 
 <?php
 
-// Get students count
+// Выбрать количество студентов
 $q = "SELECT COUNT(id) AS count FROM {$cfg['dbprefix']}_students ";
 
 $resCount = $db->query($q);
@@ -163,9 +163,9 @@ $all = ceil($count/$cfg['rowsPerPage']);
 $all = ($all == 0) ? 1 : $all;
 
 
-// Get students
-$q = "SELECT id, CONCAT(firstName, ' ', SUBSTR(middleName, 1, 1), '. ', SUBSTR(lastName, 1, 1), '.') AS name 
-		FROM {$cfg['dbprefix']}_students 
+// Выбрать список студентов
+$q = "SELECT id, CONCAT(firstName, ' ', SUBSTR(middleName, 1, 1), '. ', SUBSTR(lastName, 1, 1), '.') AS name
+		FROM {$cfg['dbprefix']}_students
 		ORDER BY name LIMIT ".$limit['s'].','.$cfg['rowsPerPage'];
 
 
@@ -201,7 +201,7 @@ if ($res->num_rows > 0) {
 				<nav aria-label="Students search results">
 					<ul id="studentsPag" class="pagination pagination-sm justify-content-center">
 						<li class="page-item first <?=($pag['s'] <= 1) ? ' disabled' : ''; ?>">
-							<a class="page-link first" href="#" aria-label="Previous" 
+							<a class="page-link first" href="#" aria-label="Previous"
 									data-page="<?=($pag['s'] <= 1) ? 1 : $pag['s']-1; ?>">
 								<span aria-hidden="true">&laquo;</span>
 								<span class="sr-only">Previous</span>
@@ -213,7 +213,7 @@ if ($res->num_rows > 0) {
 							</span>
 						</li>
 						<li class="page-item last<?=($pag['s'] >= $all) ? ' disabled' : ''; ?>">
-							<a class="page-link last" href="#" aria-label="Next" 
+							<a class="page-link last" href="#" aria-label="Next"
 									data-page="<?=($pag['s'] >= $all) ? $all : $pag['s']+1; ?>">
 								<span aria-hidden="true">&raquo;</span>
 								<span class="sr-only">Next</span>
@@ -248,7 +248,7 @@ if ($res->num_rows > 0) {
 
 <?php
 
-// Get groups count
+// Выбрать количество групп
 $q = "SELECT COUNT(id) AS count FROM {$cfg['dbprefix']}_groups ";
 
 $resCount = $db->query($q);
@@ -262,8 +262,8 @@ $all = ceil($count/$cfg['rowsPerPage']);
 $all = ($all == 0) ? 1 : $all;
 
 
-// Get groups
-$q = "SELECT id, name FROM {$cfg['dbprefix']}_groups 
+// Выбрать список групп
+$q = "SELECT id, name FROM {$cfg['dbprefix']}_groups
 		ORDER BY name LIMIT ".$limit['g'].','.$cfg['rowsPerPage'];
 
 
@@ -277,7 +277,7 @@ if ($res->num_rows > 0) {
 <tr>
 	<td><?=$row['name']; ?></td>
 	<td class="right">
-		<button type="button" class="btn btn-warning btn-sm btnChange" data-toggle="modal" 
+		<button type="button" class="btn btn-warning btn-sm btnChange" data-toggle="modal"
 				data-target="#groups" data-instance="groups" data-id="<?=$row['id']; ?>">♻</button>
 		<!-- <button type="button" class="btn btn-danger btn-sm btnDelete" data-id="<?=$row['id']; ?>">X</button> -->
 	</td>
@@ -299,7 +299,7 @@ if ($res->num_rows > 0) {
 				<nav aria-label="Groups search results">
 					<ul id="groupsPag" class="pagination pagination-sm justify-content-center">
 						<li class="page-item first<?=($pag['g'] <= 1) ? ' disabled' : ''; ?>">
-							<a class="page-link first" href="#" aria-label="Previous" 
+							<a class="page-link first" href="#" aria-label="Previous"
 									data-page="<?=($pag['g'] <= 1) ? 1 : $pag['g']-1; ?>">
 								<span aria-hidden="true">&laquo;</span>
 								<span class="sr-only">Previous</span>
@@ -311,7 +311,7 @@ if ($res->num_rows > 0) {
 							</span>
 						</li>
 						<li class="page-item last<?=($pag['g'] >= $all) ? ' disabled' : ''; ?>">
-							<a class="page-link last" href="#" aria-label="Next" 
+							<a class="page-link last" href="#" aria-label="Next"
 									data-page="<?=($pag['g'] >= $count) ? $count : $pag['g']+1; ?>">
 								<span aria-hidden="true">&raquo;</span>
 								<span class="sr-only">Next</span>
@@ -330,7 +330,7 @@ if ($res->num_rows > 0) {
 
 
 
-
+<!-- Модальные окна -->
 <div class="modal fade" id="diplomas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -358,7 +358,7 @@ if ($res->num_rows > 0) {
 					</div><br>
 
 					<div id="progress" class="progress">
-						<div class="progress-bar progress-bar-striped" role="progressbar" style="width:0%" 
+						<div class="progress-bar progress-bar-striped" role="progressbar" style="width:0%"
 								aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 					</div><br>
 					<input type="hidden" name="id">
@@ -463,7 +463,7 @@ var rowsPerPage = <?=$cfg['rowsPerPage']; ?>,
 
 
 
-// When we searching
+// Поиск при вводе
 $('#dForm').on('input', (e) => {
 	e.preventDefault();
 
@@ -511,7 +511,7 @@ $('#gForm').on('input', (e) => {
 
 
 
-// if we changing pages (pagination)
+// Переход по пагинациям
 $('#diplomasPag a').on('click', (e) => {
 	e.preventDefault();
 
@@ -560,14 +560,9 @@ $('#groupsPag a').on('click', (e) => {
 
 
 
-
-
-
-
-
-// Change event
 changeEvents();
 
+// Инициализация ивентов изменения
 function changeEvents() {
 	$('.btnChange').off('click');
 
@@ -606,7 +601,7 @@ function changeEvents() {
 
 
 
-// Submit modal forms
+// Сохранение данных в модальных окнах
 dModalForm.on('submit', (e) => {
 	e.preventDefault();
 
@@ -629,10 +624,10 @@ gModalForm.on('submit', (e) => {
 // ==========================
 
 
-// Reload rows after change
+// Обновить значения после изменения
 function reload(instance) {
 	var p = getPage();
-	
+
 	if (instance == 'diplomas') {
 
 		search(dSearch.val(), 'diplomas', p, (data, count) => {
@@ -654,7 +649,7 @@ function reload(instance) {
 }
 
 
-// Load diploma and save in db
+// Загрузить дипломную и добавить в базу
 formChangeDiploma.jqUpload({
 	url: 'engine/ajax/setChange.php',
 	dataType: 'json',
@@ -712,7 +707,7 @@ formChangeDiploma.jqUpload({
 
 
 
-// Set changes from modal forms
+// Сохранить изменения из модальных окон в базу
 function setChange(instance) {
 	if (instance == 'students') {
 		var data = sModalForm.serialize();
@@ -745,7 +740,7 @@ function setChange(instance) {
 }
 
 
-// Searching
+// Поиск
 function search(s, instance, pagin, cb) {
 	$.ajax({
 		url: 'engine/ajax/search.php',
@@ -770,7 +765,7 @@ function search(s, instance, pagin, cb) {
 
 
 
-// Set search results
+// Вывести результаты поиска
 function setResults(data, instance) {
 	var html = '';
 
@@ -806,7 +801,7 @@ function setResults(data, instance) {
 
 
 
-// Build and set pagination for results
+// Создать и установить пагинацию
 function setPagination(current, count, instance) {
 	current = parseInt(current);
 	count = parseInt(count);
@@ -841,7 +836,7 @@ function setPagination(current, count, instance) {
 
 
 
-// Get page indexes
+// Взять индексы страницы
 function getPage() {
 	var s = window.location.search.substring(1).split('&');
 	var p = {};
@@ -858,7 +853,7 @@ function getPage() {
 
 
 
-// Get row for change modal
+// Выбрать строку для модального окна
 function getRow(instance, id, cb) {
 	$.ajax({
 		url: 'engine/ajax/getRow.php',
@@ -882,11 +877,7 @@ function getRow(instance, id, cb) {
 
 
 
-
-
-
-
-// Arrray to querystring
+// Массив в строку запроса
 function toQueryString(a) {
 	var out = [];
 
@@ -905,7 +896,3 @@ function toQueryString(a) {
 <?php
 
 require_once 'engine/static/footer.php';
-
-
-
-

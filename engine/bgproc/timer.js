@@ -1,10 +1,12 @@
+// Скрипт на node.js рекурсивно запускает php скрипт для сравнения дипломных
+
 var {exec} = require('child_process');
 var fs = require('fs');
 
 
 
 
-// Check if node.js allready runing
+// Проверяем запущен ли уже таймер
 fs.readFile(__dirname+'/process.txt', (err, data) => {
 	if (err) throw err;
 
@@ -21,7 +23,7 @@ fs.readFile(__dirname+'/process.txt', (err, data) => {
 
 
 
-
+// Инициализация логов
 var d = new Date();
 var logFile = __dirname+'/logs/'+d.getFullYear()+(d.getMonth()+1)+'.log';
 
@@ -33,21 +35,21 @@ if (!fs.existsSync(__dirname+'/logs/')) {
 fs.appendFileSync(logFile, "start session\n");
 
 
-
+// Выход
 function exit() {
 	fs.appendFile(logFile, 'exit process'+"\n", (err) => {
 		if (err) throw err;
 
 		fs.writeFile(__dirname+'/process.txt', '0', (err) => {
 			if (err) throw err;
-			
+
 			process.exit();
 		});
 	});
 }
 
 
-
+// Умирание процесса
 function die() {
 	fs.appendFile(logFile, 'die process'+"\n", (err) => {
 		if (err) throw err;
@@ -57,6 +59,7 @@ function die() {
 }
 
 
+// Написать в лог
 function say(s, cb) {
 	var m = new Date().getTime();
 
@@ -68,11 +71,8 @@ function say(s, cb) {
 }
 
 
-
-
-
+// Рекурсия
 function repeat() {
-
 	var e = exec('php '+__dirname+'/compare.php', (err, stdout, sdterr) => {
 		if (err) {
 			say('err: '+err, () => {exit();});
@@ -87,7 +87,3 @@ function repeat() {
 	});
 
 }
-
-
-
-

@@ -1,6 +1,6 @@
 <?php
 
-
+// Экранирование строк
 function escapeString($s, $db=null, array $opt=null) {
 	if (!is_null($opt)) {
 
@@ -24,15 +24,14 @@ function escapeString($s, $db=null, array $opt=null) {
 }
 
 
-
+// Проверка данных на экранирование
 function checkData($val, $name, bool $void=true) {
 	$val = escapeString($val);
 
-	if ($void) 
-		if ($val == '') 
+	if ($void)
+		if ($val == '')
 			die(json_encode(['err'=> 'Параметр "'.$name.'" не валиден']));
 
 
 	return $val;
 }
-

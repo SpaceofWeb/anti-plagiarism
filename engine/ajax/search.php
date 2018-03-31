@@ -1,5 +1,7 @@
 <?php
 
+// Скрипт выбирает данные из базы при переходе по пагинации или поиске на странице изменения
+
 require_once '../data/db.php';
 require_once '../data/functions.php';
 
@@ -12,7 +14,7 @@ $s = checkData($_POST['s'], 'search', false);
 $instance = checkData($_POST['instance'], 'instance');
 
 
-// Pagination
+// Пагинация
 $limit = [];
 
 $pagin = (isset($_POST['pagin'])) ? $_POST['pagin'] : ['d'=> 1, 's'=> 1, 'g'=> 1];
@@ -24,31 +26,32 @@ foreach ($pagin as $key => $val) {
 
 
 
-// if we searching diplomas
+// Создание запросов
+// Поиск дипломных
 if ($instance == 'diplomas') {
 
 	$where = ($s == '') ? '' : "WHERE CONCAT(S.firstName, ' ', S.middleName, ' ', S.lastName) LIKE '%{$s}%' ";
 
-	$q = "SELECT D.id, CONCAT(S.firstName, ' ', SUBSTR(S.middleName, 1, 1), '. ', SUBSTR(S.lastName, 1, 1), '.') AS name 
-			FROM {$cfg['dbprefix']}_diplomas D 
-			LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id 
+	$q = "SELECT D.id, CONCAT(S.firstName, ' ', SUBSTR(S.middleName, 1, 1), '. ', SUBSTR(S.lastName, 1, 1), '.') AS name
+			FROM {$cfg['dbprefix']}_diplomas D
+			LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id
 			".$where."
 			ORDER BY S.firstName, S.middleName, S.lastName LIMIT ".$limit['d'].','.$cfg['rowsPerPage'];
 
 
-	$qCount = "SELECT COUNT(D.id) AS count 
-				FROM {$cfg['dbprefix']}_diplomas D 
-				LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id 
+	$qCount = "SELECT COUNT(D.id) AS count
+				FROM {$cfg['dbprefix']}_diplomas D
+				LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id
 				".$where;
 
 
-// if we searching students
+// Поиск студентов
 } elseif ($instance == 'students') {
 
 	$where = ($s == '') ? '' : "WHERE CONCAT(firstName, ' ', middleName, ' ', lastName) LIKE '%{$s}%' ";
 
-	$q = "SELECT id, CONCAT(firstName, ' ', SUBSTR(middleName, 1, 1), '. ', SUBSTR(lastName, 1, 1), '.') AS name 
-			FROM {$cfg['dbprefix']}_students 
+	$q = "SELECT id, CONCAT(firstName, ' ', SUBSTR(middleName, 1, 1), '. ', SUBSTR(lastName, 1, 1), '.') AS name
+			FROM {$cfg['dbprefix']}_students
 			".$where."
 			ORDER BY firstName, middleName, lastName LIMIT ".$limit['s'].','.$cfg['rowsPerPage'];
 
@@ -56,12 +59,12 @@ if ($instance == 'diplomas') {
 	$qCount = "SELECT COUNT(id) AS count FROM {$cfg['dbprefix']}_students ".$where;
 
 
-// if we searching groups
+// Поиск групп
 } elseif ($instance == 'groups') {
 
 	$where = ($s == '') ? '' : "WHERE name LIKE '%{$s}%' ";
 
-	$q = "SELECT id, name FROM {$cfg['dbprefix']}_groups 
+	$q = "SELECT id, name FROM {$cfg['dbprefix']}_groups
 			".$where."
 			ORDER BY name LIMIT ".$limit['g'].','.$cfg['rowsPerPage'];
 
@@ -73,7 +76,7 @@ if ($instance == 'diplomas') {
 
 
 
-// select data
+// Выборка данных
 $res = $db->query($q);
 if ($res->num_rows > 0) {
 	while ($row = $res->fetch_assoc()) {
@@ -102,5 +105,3 @@ if ($res->num_rows > 0) {
 	// die(json_encode(['warn'=> 'Записей не найдено']));
 	die(json_encode(['data'=> [], 'count'=> $count]));
 }
-
-

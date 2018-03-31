@@ -1,5 +1,7 @@
 <?php
 
+// Скрипт сохраняет изменения дипломных, студентов и групп в базу
+
 require_once '../data/db.php';
 require_once '../data/functions.php';
 require_once '../data/docx2text.php';
@@ -16,7 +18,8 @@ $instance = checkData($_POST['instance'], 'instance');
 $newFile = false;
 
 
-// Set rows
+// Создание запроса
+// Дипломная
 if ($instance == 'diplomas') {
 
 	if (!isset($_POST['year'])) die(json_encode(['err'=> 'Параметр "year" не найден']));
@@ -26,7 +29,7 @@ if ($instance == 'diplomas') {
 	$student = checkData($_POST['student'], 'student');
 	$doc = '';
 
-	// Save diploma
+	// Сохранение дипломной работы
 	if (isset($_FILES['file'])) {
 		$file = 'diplomas/'.$year.'/';
 
@@ -42,7 +45,7 @@ if ($instance == 'diplomas') {
 
 		$newFile = true;
 
-		// Parse file
+		// Парсинг дипломной работы
 		$d2t = new DocumentParser();
 		$text = $d2t->parseFromFile($cfg['uploadDir'].$file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
 
@@ -51,13 +54,13 @@ if ($instance == 'diplomas') {
 		$doc = ",text='{$text}', file='{$file}' ";
 	}
 
-	$q = "UPDATE {$cfg['dbprefix']}_diplomas 
-			SET year = '{$year}', 
-				student_id = '{$student}' 
-				{$doc} 
+	$q = "UPDATE {$cfg['dbprefix']}_diplomas
+			SET year = '{$year}',
+				student_id = '{$student}'
+				{$doc}
 			WHERE id='{$id}' ";
 
-
+// Студент
 } elseif ($instance == 'students') {
 
 	if (!isset($_POST['firstName'])) die(json_encode(['err'=> 'Параметр "firstName" не найден']));
@@ -71,14 +74,14 @@ if ($instance == 'diplomas') {
 	$group = checkData($_POST['group'], 'group');
 
 
-	$q = "UPDATE {$cfg['dbprefix']}_students 
-			SET firstName = '{$firstName}', 
-				middleName = '{$middleName}', 
-				lastName = '{$lastName}', 
-				group_id = '{$group}' 
+	$q = "UPDATE {$cfg['dbprefix']}_students
+			SET firstName = '{$firstName}',
+				middleName = '{$middleName}',
+				lastName = '{$lastName}',
+				group_id = '{$group}'
 			WHERE id='{$id}' ";
 
-
+// Группа
 } elseif ($instance == 'groups') {
 
 	if (!isset($_POST['group'])) die(json_encode(['err'=> 'Параметр "group" не найден']));
@@ -92,7 +95,7 @@ if ($instance == 'diplomas') {
 
 
 
-
+// Выполнение запроса
 if ($db->query($q)) {
 	if ($newFile) {
 		$q = "UPDATE {$cfg['dbprefix']}_percentage SET percent=NULL WHERE d1_id='{$id}' OR d2_id='{$id}' ";
@@ -106,4 +109,3 @@ if ($db->query($q)) {
 } else {
 	die(json_encode(['err'=> 'Произошла ошибка: '.$db->error]));
 }
-

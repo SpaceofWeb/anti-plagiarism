@@ -7,7 +7,7 @@ require_once 'engine/static/header.php';
 
 
 
-// Pagination
+// Пагинация
 $limit = [];
 
 foreach (['t'=> 0] as $key => $val) {
@@ -86,7 +86,7 @@ foreach (['t'=> 0] as $key => $val) {
 
 <?php
 
-// Get top diplomas count
+// Выбрать количество дипломных
 $q = "SELECT COUNT(id) AS count
 		FROM {$cfg['dbprefix']}_percentage
 		WHERE percent IS NOT NULL";
@@ -103,7 +103,7 @@ $all = ceil($count/$cfg['rowsPerPage']);
 $all = ($all == 0) ? 1 : $all;
 
 
-// Get top diplomas
+// Выбрать топ дипломных
 $q = "SELECT P.percent,
 			CONCAT(S.firstName, ' ', SUBSTR(S.middleName, 1, 1), '. ',
 									SUBSTR(S.lastName, 1, 1), '.') AS name,
@@ -177,7 +177,7 @@ var rowsPerPage = <?=$cfg['rowsPerPage']; ?>,
 	topDiplomas = $('#topDiplomas');
 
 
-
+// Автодополнение для поиска
 $('#search').autocomplete({
 	source: 'engine/ajax/getOptions.php',
 	select: (event, ui) => {
@@ -187,7 +187,7 @@ $('#search').autocomplete({
 });
 
 
-
+// Пагинация дипломных по студенту
 $('#diplomasPag a').on('click', (e) => {
 	e.preventDefault();
 
@@ -212,6 +212,7 @@ $('#diplomasPag a').on('click', (e) => {
 });
 
 
+// Пагинация дипломных
 $('#topDiplomasPag a').on('click', (e) => {
 	e.preventDefault();
 
@@ -242,7 +243,7 @@ $('#topDiplomasPag a').on('click', (e) => {
 
 
 
-// Get students list
+// Выбрать список студентов
 function getStudents(id, instance) {
 	$.ajax({
 		url: 'engine/ajax/searchMain.php',
@@ -270,7 +271,7 @@ function getStudents(id, instance) {
 }
 
 
-// Searching
+// Поиск
 function search(s, instance, pagin, cb) {
 	$.ajax({
 		url: 'engine/ajax/searchMain.php',
@@ -294,7 +295,7 @@ function search(s, instance, pagin, cb) {
 }
 
 
-// Build and set pagination for results
+// Создание и установка пагинации
 function setPagination(current, count, instance) {
 	current = (parseInt(current)) ? parseInt(current) : 1;
 	count = parseInt(count);
@@ -310,9 +311,7 @@ function setPagination(current, count, instance) {
 		$('#'+instance+'Pag').find('li.first>a').attr('data-page', current-1);
 	}
 
-
 	$('#'+instance+'Pag').find('li>span').text(current+'/'+all);
-
 
 	if (current >= all) {
 		$('#'+instance+'Pag').find('li.last').addClass('disabled');
@@ -325,7 +324,7 @@ function setPagination(current, count, instance) {
 }
 
 
-// Get page indexes
+// Выбрать индекс страницы для пагинации
 function getPage() {
 	var s = window.location.search.substring(1).split('&');
 	var p = {};
@@ -341,17 +340,15 @@ function getPage() {
 }
 
 
-// Arrray to querystring
+// Массив в строку запроса
 function toQueryString(a) {
 	var out = [];
-
 	for(key in a) {
 		out.push('p[' + key + ']=' + encodeURIComponent(a[key]));
 	}
 
 	return out.join('&');
 }
-
 
 
 });

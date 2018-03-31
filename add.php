@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'engine/data/db.php';
 require_once 'engine/static/head.php';
 require_once 'engine/static/header.php';
@@ -21,7 +20,8 @@ require_once 'engine/static/header.php';
 							<option value="0">-</option>
 <?php
 
-$q = "SELECT id, CONCAT(firstName, ' ', middleName, ' ', SUBSTR(lastName, 1, 1), '.') AS name 
+// Выбрать список студентов
+$q = "SELECT id, CONCAT(firstName, ' ', middleName, ' ', SUBSTR(lastName, 1, 1), '.') AS name
 		FROM {$cfg['dbprefix']}_students ORDER BY firstName, middleName";
 
 $res = $db->query($q);
@@ -47,7 +47,7 @@ if ($res->num_rows > 0) {
 					</div><br>
 
 					<div id="progress" class="progress">
-						<div class="progress-bar progress-bar-striped" role="progressbar" style="width:0%" 
+						<div class="progress-bar progress-bar-striped" role="progressbar" style="width:0%"
 								aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 					</div><br>
 
@@ -84,6 +84,7 @@ if ($res->num_rows > 0) {
 							<option value="0">-</option>
 <?php
 
+// Выбрать список групп
 $q = "SELECT * FROM {$cfg['dbprefix']}_groups ORDER BY name DESC";
 $res = $db->query($q);
 
@@ -137,7 +138,7 @@ var formAddDiploma = $('#formAddDiploma'),
 
 
 
-// Get selector options
+// Выбрать список студентов, групп
 function getOptions(instance) {
 	$.ajax({
 		url: 'engine/ajax/getOptions.php',
@@ -164,7 +165,7 @@ function getOptions(instance) {
 
 
 
-// Add group to db
+// Добавить группу в базу
 formAddGroup.on('submit', (e) => {
 	e.preventDefault();
 
@@ -191,7 +192,7 @@ formAddGroup.on('submit', (e) => {
 
 
 
-// Add student to db
+// Добавить студента в базу
 formAddStudent.on('submit', (e) => {
 	e.preventDefault();
 
@@ -218,7 +219,7 @@ formAddStudent.on('submit', (e) => {
 
 
 
-// Load diploma and save in db
+// Загрузить дипломную и добавить в базу
 formAddDiploma.jqUpload({
 	url: 'engine/ajax/addDiplomas.php',
 	dataType: 'json',
@@ -274,11 +275,6 @@ formAddDiploma.jqUpload({
 });
 
 
-
-
-
-
-
 });
 
 </script>
@@ -286,7 +282,3 @@ formAddDiploma.jqUpload({
 <?php
 
 require_once 'engine/static/footer.php';
-
-
-
-
