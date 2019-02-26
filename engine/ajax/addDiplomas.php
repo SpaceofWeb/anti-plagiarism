@@ -60,11 +60,19 @@ if ($res->num_rows > 0) {
 // Save diploma
 $file = 'diplomas/'.$year.'/';
 
-if (!file_exists($cfg['uploadDir'].$file)) mkdir($cfg['uploadDir'].$file, 0777, true);
+if (!is_writable($cfg['uploadDir'].$file)) {
+	die(json_encode(['err'=> 'Необходимо выставить права 777 на деректорию "'
+			.$cfg['uploadDir'].'"']));
+}
+
+if (!file_exists($cfg['uploadDir'].$file)) {
+	mkdir($cfg['uploadDir'].$file, 0777, true);
+	chmod($cfg['uploadDir'].$file, 0777);
+}
 
 
 $addDate = mktime();
-$file .= 'id'.$student.'-'.$addDate.'.docx';
+$file .= 'sid'.$student.'.docx';
 
 
 if (!move_uploaded_file($_FILES['file']['tmp_name'], $cfg['uploadDir'].$file)) {

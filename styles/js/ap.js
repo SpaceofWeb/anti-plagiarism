@@ -1,0 +1,5 @@
+function AP() {
+	self = this;
+}
+
+

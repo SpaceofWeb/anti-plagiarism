@@ -7,11 +7,13 @@ require_once '../data/functions.php';
 
 
 if (!isset($_POST['student'])) die(json_encode(['err'=> 'Параметр "student" не найден']));
+if (!isset($_POST['student2'])) die(json_encode(['err'=> 'Параметр "student2" не найден']));
 if (!isset($_POST['instance'])) die(json_encode(['err'=> 'Параметр "instance" не найден']));
 
 // $student = 1;
 // $instance = 'diplomas';
 $student = checkData($_POST['student'], 'student', false);
+$student2 = checkData($_POST['student2'], 'student2', false);
 $instance = checkData($_POST['instance'], 'instance');
 
 
@@ -31,24 +33,96 @@ foreach ($pagin as $key => $val) {
 if ($instance == 'diplomas') {
 
 	// Выбрать все дипломные по студенту
-	$q = "SELECT P.percent,
-					CONCAT(S.firstName, ' ', 
-						SUBSTR(S.middleName, 1, 1), '. ', 
-						SUBSTR(S.lastName, 1, 1), '.') AS name
-				FROM {$cfg['dbprefix']}_percentage P
-					LEFT JOIN {$cfg['dbprefix']}_diplomas D ON D.id=P.d2_id
-					LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id
-				WHERE P.d1_id='{$student}' AND P.percent IS NOT NULL
-				UNION SELECT P.percent,
-					CONCAT(S.firstName, ' ', 
-						SUBSTR(S.middleName, 1, 1), '. ', 
-						SUBSTR(S.lastName, 1, 1), '.') AS name
-				FROM {$cfg['dbprefix']}_percentage P
-					LEFT JOIN {$cfg['dbprefix']}_diplomas D ON D.id=P.d1_id
-					LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id
-				WHERE P.d2_id='{$student}' AND P.percent IS NOT NULL
-				ORDER BY percent DESC
-				LIMIT ".$limit['d'].','.$cfg['rowsPerPage'];;
+	if ($student != '' && $student2 == '') {
+
+		$q = "SELECT P.percent, S.firstName AS name2, S2.firstName AS name1
+					FROM ap_percentage P
+						LEFT JOIN ap_diplomas D ON D.id=P.d2_id
+						LEFT JOIN ap_students S ON S.id=D.student_id
+						LEFT JOIN ap_diplomas D2 ON D2.id=P.d1_id
+						LEFT JOIN ap_students S2 ON S2.id=D2.student_id
+					WHERE P.d1_id='{$student}'
+						AND P.percent IS NOT NULL
+					UNION SELECT P.percent, S.firstName AS name1, S2.firstName AS name2
+					FROM ap_percentage P
+						LEFT JOIN ap_diplomas D ON D.id=P.d1_id
+						LEFT JOIN ap_students S ON S.id=D.student_id
+						LEFT JOIN ap_diplomas D2 ON D2.id=P.d2_id
+						LEFT JOIN ap_students S2 ON S2.id=D2.student_id
+					WHERE P.d2_id='{$student}'
+						AND P.percent IS NOT NULL
+					ORDER BY percent DESC
+					LIMIT ".$limit['d'].','.$cfg['rowsPerPage'];
+
+	} elseif ($student == '' && $student2 != '') {
+
+		$q = "SELECT P.percent, S.firstName AS name1, S2.firstName AS name2
+					FROM ap_percentage P
+						LEFT JOIN ap_diplomas D ON D.id=P.d2_id
+						LEFT JOIN ap_students S ON S.id=D.student_id
+						LEFT JOIN ap_diplomas D2 ON D2.id=P.d1_id
+						LEFT JOIN ap_students S2 ON S2.id=D2.student_id
+					WHERE P.d1_id='{$student2}'
+						AND P.percent IS NOT NULL
+					UNION SELECT P.percent, S.firstName AS name2, S2.firstName AS name1
+					FROM ap_percentage P
+						LEFT JOIN ap_diplomas D ON D.id=P.d1_id
+						LEFT JOIN ap_students S ON S.id=D.student_id
+						LEFT JOIN ap_diplomas D2 ON D2.id=P.d2_id
+						LEFT JOIN ap_students S2 ON S2.id=D2.student_id
+					WHERE P.d2_id='{$student2}'
+						AND P.percent IS NOT NULL
+					ORDER BY percent DESC
+					LIMIT ".$limit['d'].','.$cfg['rowsPerPage'];
+
+	} else {
+
+		$q = "SELECT P.percent, S.firstName AS name2, S2.firstName AS name1
+					FROM ap_percentage P
+						LEFT JOIN ap_diplomas D ON D.id=P.d2_id
+						LEFT JOIN ap_students S ON S.id=D.student_id
+						LEFT JOIN ap_diplomas D2 ON D2.id=P.d1_id
+						LEFT JOIN ap_students S2 ON S2.id=D2.student_id
+					WHERE P.d1_id='{$student}'
+						AND P.d2_id='{$student2}'
+						AND P.percent IS NOT NULL
+					UNION SELECT P.percent, S.firstName AS name1, S2.firstName AS name2
+					FROM ap_percentage P
+						LEFT JOIN ap_diplomas D ON D.id=P.d1_id
+						LEFT JOIN ap_students S ON S.id=D.student_id
+						LEFT JOIN ap_diplomas D2 ON D2.id=P.d2_id
+						LEFT JOIN ap_students S2 ON S2.id=D2.student_id
+					WHERE P.d1_id='{$student2}'
+						AND P.d2_id='{$student}'
+						AND P.percent IS NOT NULL
+					ORDER BY percent DESC
+					LIMIT ".$limit['d'].','.$cfg['rowsPerPage'];
+
+	}
+
+
+		// $q = "SELECT P.percent,
+		// 				CONCAT(S.firstName, ' ', 
+		// 					SUBSTR(S.middleName, 1, 1), '. ', 
+		// 					SUBSTR(S.lastName, 1, 1), '.') AS name
+		// 			FROM {$cfg['dbprefix']}_percentage P
+		// 				LEFT JOIN {$cfg['dbprefix']}_diplomas D ON D.id=P.d2_id
+		// 				LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id
+		// 			WHERE P.d1_id='{$student}' 
+		// 				AND P.d2_id='{$student2}' 
+		// 				AND P.percent IS NOT NULL
+		// 			UNION SELECT P.percent,
+		// 				CONCAT(S.firstName, ' ', 
+		// 					SUBSTR(S.middleName, 1, 1), '. ', 
+		// 					SUBSTR(S.lastName, 1, 1), '.') AS name
+		// 			FROM {$cfg['dbprefix']}_percentage P
+		// 				LEFT JOIN {$cfg['dbprefix']}_diplomas D ON D.id=P.d1_id
+		// 				LEFT JOIN {$cfg['dbprefix']}_students S ON S.id=D.student_id
+		// 			WHERE P.d2_id='{$student}' 
+		// 				AND P.d1_id='{$student2}' 
+		// 				AND P.percent IS NOT NULL
+		// 			ORDER BY percent DESC
+		// 			LIMIT ".$limit['d'].','.$cfg['rowsPerPage'];
 
 
 	$qCount = "SELECT COUNT(id) AS count

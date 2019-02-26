@@ -12,5 +12,5 @@ $cfg['uploadDir'] = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
 $cfg['dbhost'] = 'localhost';
 $cfg['dbuser'] = 'root';
 $cfg['dbpass'] = 'root';
-$cfg['dbname'] = 'ap';
+$cfg['dbname'] = 'ap2';
 $cfg['dbprefix'] = 'ap';

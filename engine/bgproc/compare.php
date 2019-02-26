@@ -1,5 +1,15 @@
 <?php
 
+$s1 = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci itaque, accusantium dolores voluptatum eaque nulla numquam officia dolore maiores veritatis! Impedit commodi quod unde adipisci, minima delectus nihil iusto. Odio.';
+
+$s2 = 'Lorem ipsum dolor sit аmet, consectetur adipisicing elit. Adipisci itaque, accusantium dolores voluptatum eaque nulla numquam officia dolore maiores veritatis! Impedit commodi quod unde adipisci, minima delectus nihil iusto. Odio.';
+
+$p = 0;
+
+similar_text($s1, $s2, $p);
+
+die($p."\n");
+
 // die('norepeat');
 
 // Написать в лог

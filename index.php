@@ -21,6 +21,62 @@ foreach (['t'=> 0] as $key => $val) {
 
 <div class="container-fluid">
 	<div class="row">
+		<div class="col-md-12">
+			<div class="jumbotron pb-md-2">
+				<h4>Search diplomas</h4><br>
+					<form class="form-inline">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<div class="input-group-addon">Student1</div>
+							<input type="text" class="form-control" id="tS1" placeholder="FML">
+							<input type="hidden" id="tS1h">
+						</div>
+
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<div class="input-group-addon">Student2</div>
+							<input type="text" class="form-control" id="tS2" placeholder="FML">
+							<input type="hidden" id="tS2h">
+						</div>
+					</form>
+
+				<table class="table table-stripped">
+					<thead>
+						<tr>
+							<th>Student</th>
+							<th>Student2</th>
+							<th class="right">%</th>
+						</tr>
+					</thead>
+					<tbody id="diplomas"></tbody>
+				</table>
+
+				<nav aria-label="Diplomas search results">
+					<ul id="diplomasPag" class="pagination pagination-sm justify-content-center">
+						<li class="page-item first disabled">
+							<a class="page-link first" href="#" aria-label="Previous"
+									data-page="1">
+								<span aria-hidden="true">&laquo;</span>
+								<span class="sr-only">Previous</span>
+							</a>
+						</li>
+						<li class="page-item disabled">
+							<span class="page-link">
+								1/1
+							</span>
+						</li>
+						<li class="page-item last disabled">
+							<a class="page-link last" href="#" aria-label="Next"
+									data-page="2">
+								<span aria-hidden="true">&raquo;</span>
+								<span class="sr-only">Next</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+
+
 		<div class="col-md-5">
 			<div class="jumbotron pb-md-2">
 				<h4>Сортировка по студенту</h4><br>
@@ -178,10 +234,26 @@ var rowsPerPage = <?=$cfg['rowsPerPage']; ?>,
 
 
 // Автодополнение для поиска
-$('#search').autocomplete({
+// $('#search').autocomplete({
+// 	source: 'engine/ajax/getOptions.php',
+// 	select: (event, ui) => {
+// 		$('#studentHidden').val(ui.item.id);
+// 		getStudents(ui.item.id, 'diplomas');
+// 	}
+// });
+
+$('#tS1').autocomplete({
 	source: 'engine/ajax/getOptions.php',
 	select: (event, ui) => {
-		$('#studentHidden').val(ui.item.id);
+		$('#tS1h').val(ui.item.id);
+		getStudents(ui.item.id, 'diplomas');
+	}
+});
+
+$('#tS2').autocomplete({
+	source: 'engine/ajax/getOptions.php',
+	select: (event, ui) => {
+		$('#tS2h').val(ui.item.id);
 		getStudents(ui.item.id, 'diplomas');
 	}
 });
@@ -248,16 +320,20 @@ function getStudents(id, instance) {
 	$.ajax({
 		url: 'engine/ajax/searchMain.php',
 		type: 'POST',
-		data: {student: id, instance: instance},
+		data: {student: $('#tS1h').val(), student2: $('#tS2h').val(), instance: instance},
 		success: (data) => {
 			try {
 				data = JSON.parse(data);
 			} catch(e) {}
 
+			// $('#tS1h').val('');
+			// $('#tS2h').val('');
+
 			var html = '';
 			for (var i in data.data) {
 				html += '<tr>\
-							<td>'+data.data[i].name+'</td>\
+							<td>'+data.data[i].name1+'</td>\
+							<td>'+data.data[i].name2+'</td>\
 							<td class="right">'+data.data[i].percent+'</td>\
 						</tr>';
 			}
